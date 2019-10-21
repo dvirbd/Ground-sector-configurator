@@ -1,0 +1,9 @@
+{
+  "Taxiway": "COLOR_Taxiway",
+  "HS": "COLOR_Stopbar",
+  "Runway": "COLOR_RunwayConcrete",
+  "Apron": "COLOR_HardSurface1",
+  "Overlay": "COLOR_GrasSurface2",
+  "Building": "COLOR_Building",
+  "Inter": "COLOR_HardSurface2"
+}
