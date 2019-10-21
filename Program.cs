@@ -79,13 +79,12 @@ namespace GNGSCT_Gen
                         lline.RemoveAt(lline.Count - 1);
                         if (!insert)
                         {
-                            if (tline.StartsWith("Taxiway"))
+                            foreach (var key in Config.GetKeys())
                             {
-                                lline.Insert(0, "COLOR_Taxiway");
-                            }
-                            else if (tline.StartsWith("HS"))
-                            {
-                                lline.Insert(0, "COLOR_Stopbar");
+                                if (tline.StartsWith(key))
+                                {
+                                    lline.Insert(0, Config.GetColor(key));
+                                }
                             }
                             Geolines.Add(lline[0] + ' ' + lline[1] + ' ' + lline[2]);
                             backline.Insert(0, lline[1] + ' ' + lline[2]);
@@ -139,86 +138,26 @@ namespace GNGSCT_Gen
                     }
                     else
                     {
-                        if (line.StartsWith("Runway"))
+                        if (Config.StartsWithKey(line))
                         {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(1);
-                            if (lline[0].StartsWith("Runway"))
+                            foreach (var key in Config.GetKeys())
                             {
-                                lline[0] = "COLOR_RunwayConcrete";
-                                finishline = $"{lline[0]} {lline[1]} {lline[2]}";
-                                lines.Add(finishline);
-                            }
-                        }
-                        else if (line.StartsWith("Taxiway"))
-                        {
-                            if (!firstaxi)
-                            {
-                                firstaxi = true;
-                                Geoline = lines.Count;
-                            }
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(1);
-                            if (lline[0].StartsWith("Taxiway"))
-                            {
-                                lline[0] = "COLOR_Taxiway";
-                                finishline = $"{lline[0]} {lline[1]} {lline[2]}";
-                                lines.Add(finishline);
-                            }
-                        }
-                        else if (line.StartsWith("HS"))
-                        {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(1);
-                            if (lline[0].StartsWith("HS"))
-                            {
-                                lline[0] = "COLOR_Stopbar";
-                                finishline = $"{lline[0]} {lline[1]} {lline[2]}";
-                                lines.Add(finishline);
-                            }
-                        }
-                        else if (line.StartsWith("Apron"))
-                        {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(1);
-                            if (lline[0].StartsWith("Apron"))
-                            {
-                                lline[0] = "COLOR_HardSurface1";
-                                finishline = $"{lline[0]} {lline[1]} {lline[2]}";
-                                lines.Add(finishline);
-                            }
-                        }
-                        else if (line.StartsWith("Overlay"))
-                        {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(1);
-                            if (lline[0].StartsWith("Overlay"))
-                            {
-                                lline[0] = "COLOR_GrasSurface2";
-                                finishline = $"{lline[0]} {lline[1]} {lline[2]}";
-                                lines.Add(finishline);
-                            }
-                        }
-                        else if (line.StartsWith("Building"))
-                        {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(1);
-                            if (lline[0].StartsWith("Building"))
-                            {
-                                lline[0] = "COLOR_Building";
-                                finishline = $"{lline[0]} {lline[1]} {lline[2]}";
-                                lines.Add(finishline);
-                            }
-                        }
-                        else if (line.StartsWith("Inter"))
-                        {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(1);
-                            if (lline[0].StartsWith("Inter"))
-                            {
-                                lline[0] = "COLOR_HardSurface2";
-                                finishline = $"{lline[0]} {lline[1]} {lline[2]}";
-                                lines.Add(finishline);
+                                if (line.StartsWith(key))
+                                {
+                                    if (!firstaxi && line.StartsWith("Taxiway"))
+                                    {
+                                        firstaxi = true;
+                                        Geoline = lines.Count;
+                                    }
+                                    lline = line.Split(' ').ToList();
+                                    lline.RemoveAt(1);
+                                    if (lline[0].StartsWith(key))
+                                    {
+                                        lline[0] = Config.GetColor(key);
+                                        finishline = $"{lline[0]} {lline[1]} {lline[2]}";
+                                        lines.Add(finishline);
+                                    }
+                                }
                             }
                         }
                         else
@@ -227,6 +166,7 @@ namespace GNGSCT_Gen
                             {
                                 lines.Add(line);
                             }
+
                         }
                     }
                 }
@@ -468,6 +408,7 @@ namespace GNGSCT_Gen
         }
         static void Main(string[] args)
         {
+            Config.Utilities();
             int press = 0;
             WriteLine("Press 1 to Generate sct file and press 2 to generate GNG file");
             press = int.Parse(ReadLine());
