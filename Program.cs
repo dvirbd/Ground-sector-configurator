@@ -253,13 +253,12 @@ namespace GNGSCT_Gen
                         lline.RemoveAt(lline.Count - 1);
                         if (!insert)
                         {
-                            if (tline.StartsWith("Taxiway"))
+                            foreach (var key in Config.GetKeys())
                             {
-                                Geolines.Add("COLOR_Taxiway");
-                            }
-                            if (tline.StartsWith("HS"))
-                            {
-                                Geolines.Add("COLOR_Stopbar");
+                                if (tline.StartsWith(key))
+                                {
+                                    Geolines.Add(Config.GetColor(key));
+                                }
                             }
                             Geolines.Add(lline[0] + ' ' + lline[1]);
                             backline.Insert(0, lline[0] + ' ' + lline[1]);
@@ -313,74 +312,25 @@ namespace GNGSCT_Gen
                     }
                     else
                     {
-                        if (line.StartsWith("Runway"))
+                        if (Config.StartsWithKey(line))
                         {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(0);
-                            lline.RemoveAt(0);
-                            lines.Add("COLOR_RunwayConcrete");
-                            finishline = $"{lline[0]} {lline[1]}";
-                            lines.Add(finishline);
-                        }
-                        else if (line.StartsWith("Taxiway"))
-                        {
-                            if (!firstaxi)
+                            foreach (var key in Config.GetKeys())
                             {
-                                firstaxi = true;
-                                Geoline = lines.Count;
+                                if (line.StartsWith(key))
+                                {
+                                    if (!firstaxi && line.StartsWith("Taxiway"))
+                                    {
+                                        firstaxi = true;
+                                        Geoline = lines.Count;
+                                    }
+                                    lline = line.Split(' ').ToList();
+                                    lline.RemoveAt(0);
+                                    lline.RemoveAt(0);
+                                    lines.Add(Config.GetColor(key));
+                                    finishline = $"{lline[0]} {lline[1]}";
+                                    lines.Add(finishline);
+                                }
                             }
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(0);
-                            lline.RemoveAt(0);
-                            lines.Add("COLOR_Taxiway");
-                            finishline = $"{lline[0]} {lline[1]}";
-                            lines.Add(finishline);
-                        }
-                        else if (line.StartsWith("HS"))
-                        {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(0);
-                            lline.RemoveAt(0);
-                            lines.Add("COLOR_Stopbar");
-                            finishline = $"{lline[0]} {lline[1]}";
-                            lines.Add(finishline);
-
-                        }
-                        else if (line.StartsWith("Apron"))
-                        {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(0);
-                            lline.RemoveAt(0);
-                            lines.Add("COLOR_HardSurface1");
-                            finishline = $"{lline[0]} {lline[1]}";
-                            lines.Add(finishline);
-                        }
-                        else if (line.StartsWith("Overlay"))
-                        {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(0);
-                            lline.RemoveAt(0);
-                            lines.Add("COLOR_GrasSurface2");
-                            finishline = $"{lline[0]} {lline[1]}";
-                            lines.Add(finishline);
-                        }
-                        else if (line.StartsWith("Building"))
-                        {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(0);
-                            lline.RemoveAt(0);
-                            lines.Add("COLOR_Building");
-                            finishline = $"{lline[0]} {lline[1]}";
-                            lines.Add(finishline);
-                        }
-                        else if (line.StartsWith("Inter"))
-                        {
-                            lline = line.Split(' ').ToList();
-                            lline.RemoveAt(0);
-                            lline.RemoveAt(0);
-                            lines.Add("COLOR_HardSurface2");
-                            finishline = $"{lline[0]} {lline[1]}";
-                            lines.Add(finishline);
                         }
                         else
                         {
