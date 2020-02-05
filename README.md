@@ -1,5 +1,5 @@
-﻿# Ground Sector Configurator
-this programs allows you to change all of the ground sector colors automatically based on their name, making it easier to use programs like Google Earth to create ground sectors.
+# Ground Sector Configurator
+this programs allows you to change all of the ground sector colors automatically based on their name, making it easier to use the website that converts KMLs to SCTs from http://fsmine.dhis.org/euroscope/design/
 
 this programs was designed to create sectors for Euroscope and for the AeroNav GNG (Global Nav Generator).
 
